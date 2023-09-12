@@ -10,7 +10,7 @@ services:
       - ./back:/back
     ports:
       - "3000:3000"
-    command: sh -c "echo 'PORT=3000' > .env && npm start"
+    command: sh -c "npm i && echo 'PORT=3000' > .env && npm start"
     
 
   frontend:
@@ -21,7 +21,7 @@ services:
       - ./front:/front
     ports:
       - "8080:8080"
-    command: sh -c "echo 'PORT=8080' > .env && npm start"
+    command: sh -c "npm i && echo 'PORT=8080' > .env && npm start"
 
   # Service MongoDB
   mongodb:
