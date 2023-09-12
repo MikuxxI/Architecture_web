@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  # Service Node.js
+  # Services Node.js
   nodejs:
     image: node:18.17.1
     container_name: archi_web_app
@@ -12,7 +12,6 @@ services:
       - "3000:3000"
     command: sh -c "npm i && echo 'PORT=3000' > .env && npm start"
     
-
   frontend:
     image: node:18.17.1
     container_name: frontend_app
@@ -33,3 +32,11 @@ services:
       MONGO_INITDB_DATABASE: archi_db
     ports:
       - "27017:27017"
+  
+  # Service Jenkins
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins_app
+    ports:
+      - "8081:8080"
+      - "50000:50000"
