@@ -10,6 +10,16 @@ services:
       - ./back:/back
     ports:
       - "3000:3000"
+    command: npm run start
+
+  frontend:
+    image: node:18.17.1
+    container_name: frontend_app
+    working_dir: /front
+    volumes:
+      - ./front:/front
+    ports:
+      - "8080:8080"
     command: npm start
 
   # Service MySQL
