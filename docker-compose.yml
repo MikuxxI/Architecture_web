@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  # Service Node.js
+  nodejs:
+    image: node:18.17.1
+    container_name: archi_web_app
+    working_dir: /back
+    volumes:
+      - ./back:/back
+    ports:
+      - "3000:3000"
+    command: npm start
+
+  # Service MySQL
+  mysql:
+    image: mysql:latest
+    container_name: my_mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: jerem
+      MYSQL_PASSWORD: not24get
+    ports:
+      - "3308:3306"
