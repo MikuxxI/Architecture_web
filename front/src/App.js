@@ -1,117 +1,86 @@
 import React, { useState } from 'react';
-
-// Exemple d'état de vidéos (vous devrez le remplacer par vos propres données)
-const initialVideos = [
-  {
-    title: '007',
-    description: 'Description de la vidéo 1',
-    url: 'lien_vers_la_video_1',
-    likes: 0,
-  },
-  {
-    title: 'Terminator',
-    description: 'Description de la vidéo 2',
-    url: 'lien_vers_la_video_2',
-    likes: 0,
-  },
-  // ... Ajoutez d'autres vidéos ici
-];
-
-function LikeButton({ video }) {
-  const [likes, setLikes] = useState(video.likes);
-
-  const handleLikeClick = () => {
-    setLikes(likes + 1);
-  };
-
-  return (
-    <button onClick={handleLikeClick}>
-      J'aime ({likes})
-    </button>
-  );
-}
-
-function Thumbnail({ video }) {
-  return (
-    <div className="thumbnail">
-      {/* Affichez la miniature de la vidéo ici */}
-    </div>
-  );
-}
-
-function Video({ video }) {
-  return (
-    <div className="video">
-      <Thumbnail video={video} />
-      <a href={video.url}>
-        <h3>{video.title}</h3>
-        <p>{video.description}</p>
-      </a>
-      <LikeButton video={video} />
-    </div>
-  );
-}
-
-function SearchableVideoList({ videos }) {
-  const [searchText, setSearchText] = useState('');
-
-  // Fonction de filtrage des vidéos en fonction du texte de recherche
-  const filterVideos = (videos, searchText) => {
-    return videos.filter(video =>
-      video.title.toLowerCase().includes(searchText.toLowerCase())
-    );
-  };
-
-  // Composant de recherche
-  const SearchInput = () => (
-    <input
-      type="text"
-      placeholder="Rechercher des vidéos"
-      value={searchText}
-      onChange={handleSearchInputChange} // Utilisez la fonction de gestion du changement
-    />
-  );
-
-  // Composant pour afficher la liste filtrée de vidéos
-  const VideoList = ({ videos, emptyHeading }) => (
-    <div>
-      <h2>Résultats de recherche</h2>
-      {videos.length === 0 ? (
-        <p>{emptyHeading}</p>
-      ) : (
-        videos.map((video, index) => (
-          <Video key={index} video={video} />
-        ))
-      )}
-    </div>
-  );
-
-  // Fonction de gestion du changement de texte de recherche
-  const handleSearchInputChange = (event) => {
-    setSearchText(event.target.value);
-  };
-
-  // Appel de la fonction de filtrage et affichage des résultats
-  const foundVideos = filterVideos(videos, searchText);
-
-  return (
-    <div>
-      <SearchInput />
-      <VideoList videos={foundVideos} emptyHeading={`Aucune vidéo trouvée pour "${searchText}"`} />
-    </div>
-  );
-}
-
+import './App.css';
 function App() {
-  const [videos, setVideos] = useState(initialVideos);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+  
+    const files = Array.from(e.dataTransfer.files);
+  
+    // Vérifier chaque fichier pour s'assurer qu'il est accepté
+    const invalidFiles = files.filter((file) => {
+      const fileType = file.name.split('.').pop(); // Obtenir l'extension du fichier
+      return !['pdf', 'docx', 'doc'].includes(fileType.toLowerCase()); // Vérifier l'extension
+    });
+  
+    if (invalidFiles.length > 0) {
+      // Afficher un message d'erreur pour les fichiers non autorisés
+      alert('Les fichiers suivants ne sont pas autorisés : ' + invalidFiles.map((file) => file.name).join(', '));
+    } else {
+      setSelectedFiles(files);
+    }
+  };
+
+  const handleFileSelect = (e) => {
+    const files = Array.from(e.target.files);
+  
+    // Vérifier chaque fichier pour s'assurer qu'il est accepté
+    const invalidFiles = files.filter((file) => {
+      const fileType = file.name.split('.').pop(); // Obtenir l'extension du fichier
+      return !['pdf', 'docx', 'doc'].includes(fileType.toLowerCase()); // Vérifier l'extension
+    });
+  
+    if (invalidFiles.length > 0) {
+      // Afficher un message d'erreur pour les fichiers non autorisés
+      alert('Les fichiers suivants ne sont pas autorisés : ' + invalidFiles.map((file) => file.name).join(', '));
+    } else {
+      setSelectedFiles(files);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  
+    // Vérifier s'il y a des fichiers sélectionnés
+    if (selectedFiles.length === 0) {
+      alert('Veuillez sélectionner des fichiers avant d\'envoyer le formulaire.');
+      return;
+    }
+  
+    // Parcourir les fichiers sélectionnés et afficher leurs noms dans la console
+    selectedFiles.forEach((file) => {
+      console.log('Nom du fichier :', file.name);
+      // Ici, vous pouvez ajouter votre logique pour envoyer les fichiers au serveur si nécessaire.
+    });
+  
+    // Réinitialiser la liste des fichiers sélectionnés
+    setSelectedFiles([]);
+  };
 
   return (
-    <div className="App">
-      <h1>Ma liste de vidéos</h1>
-      {videos.map((video, index) => (
-        <Video key={index} video={video} />
-      ))}
-      <SearchableVideoList videos={videos} />
+
+    <div className="form-container">
+      <h1>Déposer vos fichiers</h1>
+      <form onSubmit={handleSubmit} onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
+      
+        <div className="file-drop-zone">
+        <input
+            type="file"
+            id="fileInput"
+            multiple
+            onChange={handleFileSelect}
+            accept=".docx, .doc, .pdf" // Types de fichiers acceptés
+          />
+          <label htmlFor="fileInput">Sélectionnez des fichiers ou faites-les glisser ici.</label>
+          <ul>
+            {selectedFiles.map((file, index) => (
+              <li key={index}>{file.name}</li>
+            ))}
+          </ul>
+        </div>
+        <button type="submit">Envoyer</button>
+      </form>
     </div>
   );
 }
