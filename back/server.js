@@ -2,6 +2,7 @@
 require('dotenv').config();
 const express = require('express');
 const fs = require('fs');
+const parsepdf = require('./services/parsepdf');
 const connectDB  = require('./db/db');
 const app = express();
 
@@ -20,7 +21,8 @@ if (fs.existsSync(pathDefaultPDF)) {
       content: 'test',
       key: ['test'],
     }
-    await Doc.create(doc);
+    parsepdf(fs.readFileSync(`${pathDefaultPDF}/${defaultDoc}`));
+    //await Doc.create(doc);
   })
 };
 
