@@ -1,7 +1,22 @@
 import React, { useState } from 'react';
 import './App.css';
+
 function App() {
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [searchValue, setSearchValue] = useState(''); // État pour la valeur de recherche
+  const [documents, setDocuments] = useState([
+    {
+      title: "Document 1",
+      date: "12 septembre 2023",
+      content: "Contenu du document 1..."
+    },
+    {
+      title: "Document 2",
+      date: "15 septembre 2023",
+      content: "Contenu du document 2..."
+    }
+    // Ajoutez d'autres documents ici
+  ]);
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -58,14 +73,17 @@ function App() {
     setSelectedFiles([]);
   };
 
-  return (
+  // Fonction pour filtrer les documents en fonction de la valeur de recherche
+  const filteredDocuments = documents.filter((document) =>
+    document.title.toLowerCase().includes(searchValue.toLowerCase()) || document.content.toLowerCase().includes(searchValue.toLowerCase())
+  );
 
+  return (
     <div className="form-container">
-      <h1>Déposer vos fichiers</h1>
+      <h1>Déposez vos fichiers</h1>
       <form onSubmit={handleSubmit} onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
-      
         <div className="file-drop-zone">
-        <input
+          <input
             type="file"
             id="fileInput"
             multiple
@@ -81,6 +99,28 @@ function App() {
         </div>
         <button type="submit">Envoyer</button>
       </form>
+
+      {/* Barre de recherche */}
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Rechercher des documents"
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+        />
+      </div>
+
+      <h1>Vos fichiers</h1>
+      {/* Afficher les documents filtrés */}
+      <ul>
+        {filteredDocuments.map((document, index) => (
+          <li key={index}>
+            <h2>{document.title}</h2>
+            <p>Date : {document.date}</p>
+            <p>{document.content}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
