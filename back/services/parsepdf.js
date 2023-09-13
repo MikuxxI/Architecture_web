@@ -1,23 +1,9 @@
 const pdf = require('pdf-parse');
+const fs = require('fs');
 
-const parsepdf = (dataBuffer) => {
-    pdf(dataBuffer).then(function(data) {
- 
-        // number of pages
-        console.log(data.numpages);
-        // number of rendered pages
-        console.log(data.numrender);
-        // PDF info
-        console.log(data.info);
-        // PDF metadata
-        console.log(data.metadata); 
-        // PDF.js version
-        // check https://mozilla.github.io/pdf.js/getting_started/
-        console.log(data.version);
-        // PDF text
-        console.log(data.text); 
-            
-    });
+const parsepdf = async (dataBuffer) => {
+    const data = await pdf(dataBuffer);
+    return data.text;
 }
 
 module.exports = parsepdf;

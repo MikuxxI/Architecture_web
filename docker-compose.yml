@@ -10,7 +10,7 @@ services:
       - ./back:/back
     ports:
       - "3000:3000"
-    command: sh -c "echo 'PORT=3000' > .env && npm start"
+    command: sh -c "echo 'PORT=3000 DB=mongodb://localhost:27017archi_db' > .env && npm start"
     
 
   frontend:
@@ -21,7 +21,7 @@ services:
       - ./front:/front
     ports:
       - "8080:8080"
-    command: sh -c "echo 'PORT=8080' > .env && npm start"
+    command: sh -c "echo 'PORT=8080 DB=mongodb://jerem:not24get@127.0.0.1:27017/?authSource=admin' > .env && npm start"
 
   # Service MongoDB
   mongodb:
