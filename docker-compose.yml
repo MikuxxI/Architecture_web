@@ -10,7 +10,7 @@ services:
       - ./back:/back
     ports:
       - "3000:3000"
-    command: sh -c "npm i && echo 'PORT=3000' > .env && npm start"
+    command: sh -c 'echo "PORT=\"3000\"" > .env && echo "DB=\"mongodb://jerem:not24get@127.0.0.1:27017/?retryWrites=true&w=majority\"" >> .env && echo "FOLDER_FILES=\"ArchiWeb/Files\"" >> .env && npm i && npm start'
     
   frontend:
     image: node:18.17.1
