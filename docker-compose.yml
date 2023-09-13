@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  # Service Node.js
+  # Services Node.js
   nodejs:
     image: node:18.17.1
     container_name: archi_web_app
@@ -10,9 +10,8 @@ services:
       - ./back:/back
     ports:
       - "3000:3000"
-    command: sh -c "echo 'PORT=3000 DB=mongodb://localhost:27017archi_db' > .env && npm start"
+    command: sh -c "npm i && echo 'PORT=3000' > .env && npm start"
     
-
   frontend:
     image: node:18.17.1
     container_name: frontend_app
@@ -21,7 +20,7 @@ services:
       - ./front:/front
     ports:
       - "8080:8080"
-    command: sh -c "echo 'PORT=8080 DB=mongodb://jerem:not24get@127.0.0.1:27017/?authSource=admin' > .env && npm start"
+    command: sh -c "npm i && echo 'PORT=8080' > .env && npm start"
 
   # Service MongoDB
   mongodb:
@@ -33,3 +32,11 @@ services:
       MONGO_INITDB_DATABASE: archi_db
     ports:
       - "27017:27017"
+  
+  # Service Jenkins
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins_app
+    ports:
+      - "8081:8080"
+      - "50000:50000"
