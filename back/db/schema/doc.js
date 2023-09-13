@@ -8,4 +8,6 @@ const docSchema = new Schema({
   extension: String,
 });
 
+docSchema.index({ name: 'text', content: 'text' }, { name: 'search' });
+
 module.exports = mongoose.model('doc', docSchema);
