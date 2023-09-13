@@ -27,19 +27,40 @@ if (fs.existsSync(pathDefaultPDF)) {
   })
 };
 
+app.get("/docs", async (req, res) => {
+  if (!req.query.search) {
+    res.status(400).send({
+      message: "Content can not be empty !"
+    });
+    return;
+  }
 
-
-
-app.get("/docs", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
+  const docs = await Doc.find(
+    { 
+      $text: { 
+        $search: req.query.search
+      }
+    },
+    {
+      _id: 0,
+      name: 1,
+      url: 1
+    }
+  ).sort({ score: { $meta: "textScore" }, name: 1 });
+    
+  if (!docs) {
+    res.status(404).send({
+      message: "Not found exception !"
+    });
+  }
+  res.json({ documents: docs });
 }); 
 
 app.post("/docs", (req, res) => {
   // Validate request
   if (!req.body.name 
     && !req.body.content 
-    && !req.body.extension 
-    && !(['pdf']).includes(req.body.extension)
+    && req.body?.extension !== 'pdf' 
   ) {
     res.status(400).send({
       message: "Content can not be empty!"
@@ -47,9 +68,7 @@ app.post("/docs", (req, res) => {
     return;
   }
   
-  if(req.body.extension === 'pdf') {
-    createDocSeed(Doc, defaultDoc, newPath, req.body.content);
-  }
+  createDocSeed(Doc, defaultDoc, newPath, req.body.content);
 
   res.status(200).send({
     message: `Votre fichier ${req.body.name} vient d'être enregistré.`
