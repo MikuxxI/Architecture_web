@@ -1,6 +1,6 @@
-
 require('dotenv').config();
-const express = require('express');
+const express = require("express");
+const cors = require("cors"); // Import du middleware CORS
 const fs = require('fs');
 const createDocSeed = require('./services/createDocSeed');
 const connectDB  = require('./db/db');
@@ -26,6 +26,9 @@ if (fs.existsSync(pathDefaultPDF)) {
     createDocSeed(Doc, defaultDoc, newPath, null);
   })
 };
+
+// Configuration CORS pour permettre l'accès depuis http://localhost:8080
+app.use(cors({ origin: "http://localhost:8080" }));
 
 app.get("/docs", async (req, res) => {
   if (!req.query.search) {
