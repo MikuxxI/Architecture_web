@@ -22,7 +22,7 @@ if (fs.existsSync(pathDefaultPDF)) {
   defaultDocs.map(async (defaultDoc) => {
     const oldPath = `${pathDefaultPDF}/${defaultDoc}`;
     const newPath = `${folderFiles}/${defaultDoc}`;
-    fs.renameSync(oldPath, newPath);
+    fs.copyFileSync(oldPath, newPath);
     createDocSeed(Doc, defaultDoc, newPath, null);
   })
 };
