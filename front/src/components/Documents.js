@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Document, Page } from "react-pdf";
+import PdfViewerComponent from './PdfViewerComponent.js';
 
 function Documents() {
   const [documents, setDocuments] = useState([]);
@@ -55,9 +56,12 @@ function Documents() {
       />
       {documents.map((item, i) => (
         <div key={i}>
-          <button onClick={() => loadDocument(item.url)}>
-            {item.name}
-          </button>
+            <h2>{item.name}</h2>
+            <div className="PDF-viewer">
+            <PdfViewerComponent
+                document={item.name}
+            />
+        </div>
         </div>
       ))}
       {selectedDocument && (
