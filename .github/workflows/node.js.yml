@@ -17,4 +17,4 @@ jobs:
       run: cd back && npm i
 
     - name: Exécuter les tests
-      run: cd back && npm test
+      run: cd back && npm run test
