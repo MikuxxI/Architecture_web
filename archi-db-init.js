@@ -8,6 +8,10 @@ db.createUser({
         role: 'readWrite',
         db: 'archi_db',
       },
+      {
+        role: 'readWrite',
+        db: 'test',
+      },
     ],
   });
   

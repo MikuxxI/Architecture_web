@@ -32,7 +32,7 @@ services:
   # Services Node.js
   nodejs:
     image: node:18.17.1
-    container_name: archi_web_app
+    container_name: backend_app
     working_dir: /back
     volumes:
       - ./back:/back
