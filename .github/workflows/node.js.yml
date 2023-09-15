@@ -14,11 +14,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Installer les dépendances
-      run: |
-        cd ../../../back  # Accédez au sous-dossier "back"
-        npm install  # Installez les dépendances du projet
+      run: cd back && npm i
 
     - name: Exécuter les tests
-      run: |
-        cd ../../../back  # Accédez au sous-dossier "back"
-        npm test  # Exécutez les tests du projet
+      run: cd back && npm test
