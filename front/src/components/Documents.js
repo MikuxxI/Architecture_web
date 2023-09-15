@@ -1,21 +1,49 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Document } from 'react-pdf'
+import { Document, Page } from "react-pdf";
 
 function Documents() {
   const [documents, setDocuments] = useState([]);
-  const [search, setSearch] = useState(null);
+  const [search, setSearch] = useState("");
+  const [selectedDocument, setSelectedDocument] = useState(null);
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/docs?search=${search}`)
-      .then((response) => {
-        setDocuments(response.data.documents);
-        console.log(JSON.stringify(response.data, null, 2));
-      })
-      .catch((error) => {
-        console.error("Une erreur s'est produite lors de la récupération des documents :", error);
-      });
+    if (search === "") {
+      setDocuments([]);
+    } else {
+      axios
+        .get(`http://localhost:3000/docs?search=${search}`)
+        .then((response) => {
+          setDocuments(response.data.documents);
+        })
+        .catch((error) => {
+          console.error(
+            "Une erreur s'est produite lors de la récupération des documents :",
+            error
+          );
+        });
+    }
   }, [search]);
+
+  const loadDocument = (documentUrl) => {
+    setSelectedDocument(documentUrl);
+  };
+
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  };
+
+  const goToPrevPage = () => {
+    setPageNumber(pageNumber - 1 <= 1 ? 1 : pageNumber - 1);
+  };
+
+  const goToNextPage = () => {
+    setPageNumber(
+      pageNumber + 1 >= numPages ? numPages : pageNumber + 1
+    );
+  };
 
   return (
     <div>
@@ -23,13 +51,29 @@ function Documents() {
         type="text"
         placeholder="Rechercher des documents"
         value={search}
-        onChange={(e) => e === '' ? setSearch(null) : setSearch(e.target.value)}
+        onChange={(e) => setSearch(e.target.value)}
       />
-      {search && documents.map((item, i) => (
+      {documents.map((item, i) => (
         <div key={i}>
-          <a href={item.url} target="_blank" rel="noopener noreferrer">{item.name}</a>
+          <button onClick={() => loadDocument(item.url)}>
+            {item.name}
+          </button>
         </div>
       ))}
+      {selectedDocument && (
+        <div>
+          <Document file={selectedDocument} onLoadSuccess={onDocumentLoadSuccess}>
+            <Page pageNumber={pageNumber} />
+          </Document>
+          <div>
+            <button onClick={goToPrevPage}>Prev</button>
+            <button onClick={goToNextPage}>Next</button>
+          </div>
+          <p>
+            Page {pageNumber} of {numPages}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
