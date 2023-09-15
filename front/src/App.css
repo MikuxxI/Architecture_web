@@ -36,3 +36,56 @@
     transform: rotate(360deg);
   }
 }
+
+.form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 2px dashed #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.file-drop-zone {
+  border: 2px dashed #999;
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  background-color: #fff;
+  cursor: pointer;
+}
+.file-drop-zone input {
+ display: none;
+}
+button{
+  margin-top: 2rem;
+}
+.file-drop-zone label {
+  font-size: 16px;
+}
+
+.file-list {
+  list-style-type: none;
+  padding: 0;
+  text-align: left;
+}
+
+.file-list li {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.submit-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
