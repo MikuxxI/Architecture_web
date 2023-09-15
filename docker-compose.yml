@@ -53,7 +53,6 @@ services:
     working_dir: /front
     volumes:
       - ./front:/front
-      - C:/ArchiWeb/Files:/front/public/
     ports:
       - "8080:8080"
     command: sh -c "npm i && echo 'PORT=8080' > .env && npm start"
