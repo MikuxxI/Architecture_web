@@ -1,0 +1,24 @@
+name: Tests CI
+
+on:
+  push:
+    branches:
+      - main  # Modifier la branche cible si nécessaire
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout le code
+      uses: actions/checkout@v2
+
+    - name: Installer les dépendances
+      run: |
+        cd ./back  # Accédez au sous-dossier "back"
+        npm install  # Installez les dépendances du projet
+
+    - name: Exécuter les tests
+      run: |
+        cd ./back  # Accédez au sous-dossier "back"
+        npm test  # Exécutez les tests du projet
